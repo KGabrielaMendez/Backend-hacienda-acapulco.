@@ -1,0 +1,1 @@
+{"version":3,"file":"grupo.js","sourceRoot":"","sources":["../../models/grupo.ts"],"names":[],"mappings":";;;;;AAAA,yCAAsC;AACtC,0DAA8B;AAE9B,MAAM,KAAK,GAAG,gBAAE,CAAC,MAAM,CAAC,OAAO,EAAE;IAC3B,UAAU,EAAE;QACV,IAAI,EAAE,qBAAS,CAAC,MAAM;QACtB,SAAS,EAAC,KAAK;KAChB;CACF,CAAC,CAAC;AAGP,kBAAe,KAAK,CAAC"}
