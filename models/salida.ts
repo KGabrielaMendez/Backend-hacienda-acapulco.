@@ -5,7 +5,7 @@ import Usuario from './usuario';
 
 const Salida = db.define('Salida', {
     fecha_salida: {
-        type: DataTypes.DATEONLY,
+        type: DataTypes.DATE,
         allowNull:false,
       },
       cantidad: {

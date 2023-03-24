@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getByGroups = exports.deleteGrupo = exports.putGrupo = exports.postGrupo = exports.getGrupo = exports.getGrupos = void 0;
+exports.getGanadoEquinoList = exports.getGanadoBovinoList = exports.deleteGrupo = exports.putGrupo = exports.postGrupo = exports.getGrupo = exports.getGrupos = void 0;
 const grupo_1 = __importDefault(require("../models/grupo"));
 const sequelize_1 = require("sequelize");
 const config_1 = __importDefault(require("./../db/config"));
@@ -106,10 +106,10 @@ const deleteGrupo = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.deleteGrupo = deleteGrupo;
-const getByGroups = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getGanadoBovinoList = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     try {
-        const datosgrupos = yield config_1.default.query("select  g.arete_gan, g.tipo_gan, g.estado, g.fechanac_gan, g.sexo_gan, gr.nombre_gru, r.nombre_ra from ganado g, grupo gr,raza r WHERE gr.id=g.id_grupo and g.id_raza= r.id", {
+        const datosgrupos = yield config_1.default.query("select  g.id, g.arete_gan, g.tipo_gan, g.estado, g.fechanac_gan, g.sexo_gan, gr.nombre_gru, r.nombre_ra , g.nombre_gan, id_raza, id_grupo ,observacion_gan from ganado g, grupo gr,raza r WHERE gr.id=g.id_grupo and g.id_raza= r.id and estado=1 and g.tipo_gan='bovino'", {
             nest: true,
             type: sequelize_1.QueryTypes.SELECT
         });
@@ -123,5 +123,23 @@ const getByGroups = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         });
     }
 });
-exports.getByGroups = getByGroups;
+exports.getGanadoBovinoList = getGanadoBovinoList;
+const getGanadoEquinoList = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    try {
+        const datosgrupos = yield config_1.default.query("select  g.id, g.arete_gan, g.tipo_gan, g.estado, g.fechanac_gan, g.sexo_gan, gr.nombre_gru, r.nombre_ra , g.nombre_gan, id_raza, id_grupo ,observacion_gan from ganado g, grupo gr,raza r WHERE gr.id=g.id_grupo and g.id_raza= r.id and estado=1 and g.tipo_gan='equino'", {
+            nest: true,
+            type: sequelize_1.QueryTypes.SELECT
+        });
+        res.json(datosgrupos);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).json({
+            msg: 'hable con el administrador ',
+            error: err
+        });
+    }
+});
+exports.getGanadoEquinoList = getGanadoEquinoList;
 //# sourceMappingURL=grupo.js.map

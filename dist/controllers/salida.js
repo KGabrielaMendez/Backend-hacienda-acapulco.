@@ -13,10 +13,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteSalida = exports.putSalida = exports.postSalida = exports.getSalida = exports.getSalidas = void 0;
-const salida_1 = __importDefault(require("./../models/salida"));
+const config_1 = __importDefault(require("../db/config"));
+const sequelize_1 = require("sequelize");
+const salida_1 = __importDefault(require("../models/salida"));
 const getSalidas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const salidas = yield salida_1.default.findAll();
+        const salidas = yield config_1.default.query("select s.*, u.usuario from salida s , usuarios u where u.id=s.id_usuario order by fecha_salida", {
+            nest: true,
+            type: sequelize_1.QueryTypes.SELECT
+        });
         res.json(salidas);
     }
     catch (err) {

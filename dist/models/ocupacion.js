@@ -10,6 +10,9 @@ const Ocupacion = config_1.default.define('Ocupacion', {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false
     },
+    estado: {
+        type: sequelize_1.DataTypes.BOOLEAN
+    }
 });
 exports.default = Ocupacion;
 //# sourceMappingURL=ocupacion.js.map

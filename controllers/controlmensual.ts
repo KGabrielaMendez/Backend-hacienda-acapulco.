@@ -5,10 +5,12 @@ import { QueryTypes } from 'sequelize';
 
 
 export const getControlMensuales = async (req: Request, res: Response) => {
+    const preciolitro = 0.45;
     try {
         const controlMensuals = await sequelize.query(
-            "select * from cuenta_ordenio",
+            "select id ,year(fecha_ord) as 'anio', monthname(fecha_ord) as 'mes' , sum(litros_ord) as 'litros_mes', concat('$ ',round((sum(litros_ord)*$1),2)) as 'cuenta_mes', fecha_ord  from ordenio group by extract(year_month from fecha_ord)",
             { 
+                bind: [preciolitro],
                 nest: true,
                 type: QueryTypes.SELECT
             }

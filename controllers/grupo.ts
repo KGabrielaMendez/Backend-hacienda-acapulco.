@@ -97,11 +97,31 @@ export const deleteGrupo = async (req: Request, res: Response) => {
     }
 };
 
-export const getByGroups = async (req: Request, res: Response) => {
+export const getGanadoBovinoList = async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
         const datosgrupos = await sequelize.query(
-            "select  g.arete_gan, g.tipo_gan, g.estado, g.fechanac_gan, g.sexo_gan, gr.nombre_gru, r.nombre_ra from ganado g, grupo gr,raza r WHERE gr.id=g.id_grupo and g.id_raza= r.id",
+            "select  g.id, g.arete_gan, g.tipo_gan, g.estado, g.fechanac_gan, g.sexo_gan, gr.nombre_gru, r.nombre_ra , g.nombre_gan, id_raza, id_grupo ,observacion_gan from ganado g, grupo gr,raza r WHERE gr.id=g.id_grupo and g.id_raza= r.id and estado=1 and g.tipo_gan='bovino'",
+            {
+                nest: true,
+                type: QueryTypes.SELECT
+            }
+        );
+        res.json(datosgrupos);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).json({
+            msg: 'hable con el administrador ',
+            error: err
+        });
+    }
+}
+export const getGanadoEquinoList = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    try {
+        const datosgrupos = await sequelize.query(
+            "select  g.id, g.arete_gan, g.tipo_gan, g.estado, g.fechanac_gan, g.sexo_gan, gr.nombre_gru, r.nombre_ra , g.nombre_gan, id_raza, id_grupo ,observacion_gan from ganado g, grupo gr,raza r WHERE gr.id=g.id_grupo and g.id_raza= r.id and estado=1 and g.tipo_gan='equino'",
             {
                 nest: true,
                 type: QueryTypes.SELECT

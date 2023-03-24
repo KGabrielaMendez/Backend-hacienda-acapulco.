@@ -1,5 +1,6 @@
 import { DataTypes } from 'sequelize';
 import db from '../db/config';
+import Categoria from './categoria';
 
 const Producto = db.define('Productos', {
     nombre_pro: {
@@ -14,9 +15,6 @@ const Producto = db.define('Productos', {
         type: DataTypes.STRING,
         allowNull:false,
       },
-      udM: {
-        type: DataTypes.STRING,
-      },
       estado: {
           type: DataTypes.BOOLEAN,
           defaultValue: 1,
@@ -24,4 +22,7 @@ const Producto = db.define('Productos', {
     });
 
       
-export default Producto;
+    
+    Categoria.hasMany(Producto, {foreignKey: 'id_raza'});
+    Producto.belongsTo(Categoria,{foreignKey: 'id_raza'});
+    export default Producto;

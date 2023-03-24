@@ -14,14 +14,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteComerciante = exports.putComerciante = exports.postComerciante = exports.getComerciante = exports.getComerciantes = void 0;
 const comerciante_1 = __importDefault(require("./../models/comerciante"));
+const sequelize_1 = require("sequelize");
+const config_1 = __importDefault(require("./../db/config"));
 const getComerciantes = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const comerciantes = yield comerciante_1.default.findAll();
+        const comerciantes = yield config_1.default.query("SELECT * FROM comerciante where estado=1", {
+            type: sequelize_1.QueryTypes.SELECT,
+        });
         res.json(comerciantes);
     }
     catch (err) {
+        console.error(err);
         res.json({
-            msg: err,
+            msg: `hable con el admin: ${res.status}`,
         });
     }
 });

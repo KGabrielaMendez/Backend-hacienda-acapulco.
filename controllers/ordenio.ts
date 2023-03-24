@@ -4,23 +4,49 @@ import sequelize from '../db/config';
 import { QueryTypes } from "sequelize";
 
 
-export const getOrdenios = async (req: Request, res: Response) => {
+export const getOrdeniosByDate = async (req: Request, res: Response) => {
+    const { fecha } = req.params;
     try {
         const ordenios = await sequelize.query(
-            "select id , DATE_FORMAT(fecha_ord,'%d - %b - %Y') as 'Fecha' , litros_ord as 'Litros Totales'  from ordenio ;",
+            "select fecha_ord as dia, litros_ord, numerovacas_ord from ordenio where extract(year from fecha_ord) = year($1) and extract(month from fecha_ord) = month($1) order by  fecha_ord ",
+             {
+                bind: [fecha],
+                nest:true,
+                type: QueryTypes.SELECT
+            }
+        );
+        res.json(ordenios);
+    } catch (err) {
+        res.status(500).json({
+            message: "error a traer los datos de la base",
+            error: err
+        })
+    }
+}
+
+export const getOrdenios = async (req: Request, res: Response) => {
+  const {id} = req.params;
+    try {
+        const ordenios = await sequelize.query(
+            "select id , fecha_ord,'%d - %b - %Y') as 'Fecha' , litros_ord as 'Litros_Totales', numerovacas_ord as Vacas_Ordeniadas from ordenio",
             {
                 nest:true,
                 type: QueryTypes.SELECT
             }
         )
-        res.json(ordenios);
+      //validaciones para usuarios autenticados
+        //  const usuarioAutenticado = req.usuario;
+     //   res.json({ ordenios, usuarioAutenticado });
+        res.json({ ordenios });
+     
     } catch (err) {
         res.status(500).json({
-            msg: "error a traer los datos de la base",
+            message: "error a traer los datos de la base",
             error: err
         })
     }
 }
+
 
 
 export const getOrdeniosFindAll = async (req: Request, res: Response) => {
@@ -29,7 +55,7 @@ export const getOrdeniosFindAll = async (req: Request, res: Response) => {
         res.json(ordenios);
     } catch (err) {
         res.json({
-            msg: err,
+            message: err,
         })
     }
 }
@@ -42,12 +68,12 @@ export const getOrdenio = async (req: Request, res: Response) => {
         if (ordenio) {
             res.json(ordenio);
         } else {
-            res.status(404).json({ msg: 'No existe ordenio con el id: ' + id });
+            res.status(404).json({ message: 'No existe ordenio con el id: ' + id });
         }
 
     } catch (err) {
         res.json({
-            msg: err,
+            message: err,
         })
     }
 
@@ -63,7 +89,7 @@ export const postOrdenio = async (req: Request, res: Response) => {
     } catch (error) {
         console.log(error);
         res.status(500).json({
-            msg: 'hable con el administrador ',
+            message: 'hable con el administrador ',
             error: error
         });
     }
@@ -87,7 +113,7 @@ export const putOrdenio = async (req: Request, res: Response) => {
     } catch (error) {
         console.log(error);
         res.status(500).json({
-            msg: 'hable con el administrador ',
+            message: 'hable con el administrador ',
             error: error
         });
     }
@@ -99,7 +125,7 @@ export const deleteOrdenio = async (req: Request, res: Response) => {
         const ordenio = await Ordenio.findByPk(id);
         if (!ordenio) {
             return res.status(404).json({
-                msg: 'No existe un ordenio con el id: ' + id
+                message: 'No existe un ordenio con el id: ' + id
             });
         }
         await ordenio.update({ estado: false });
@@ -108,7 +134,7 @@ export const deleteOrdenio = async (req: Request, res: Response) => {
     catch (error) {
         console.log(error);
         res.status(500).json({
-            msg: 'hable con el administrador ',
+            message: 'hable con el administrador ',
             error: error
         });
     }

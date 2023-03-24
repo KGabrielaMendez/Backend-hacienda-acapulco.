@@ -4,15 +4,16 @@ import { getRazas,
          postRaza,
          putRaza,
          deleteRaza } from '../controllers/raza';
-import {check} from 'express-validator';
+
+         import { validarJWT } from '../middlewares/validar-jwt';
 
 const router = Router();
 
-router.get('/',       getRazas);
-router.get('/:id',    getRaza);
-router.post('/',      postRaza);
-router.put('/:id',    putRaza);
-router.delete('/:id', deleteRaza);
+router.get('/',     [validarJWT],  getRazas);
+router.get('/:id',  [validarJWT],  getRaza);
+router.post('/',    [validarJWT],  postRaza);
+router.put('/:id',  [validarJWT],  putRaza);
+router.delete('/:id', [validarJWT],deleteRaza);
 
 
 

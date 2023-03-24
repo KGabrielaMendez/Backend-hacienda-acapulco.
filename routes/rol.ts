@@ -4,13 +4,15 @@ import { getRoles,
          postRol,
          putRol,
          deleteRol } from '../controllers/roles';
+         
+    import { validarJWT } from '../middlewares/validar-jwt';
 
 const router = Router();
 
-router.get('/',       getRoles);
-router.get('/:id',    getRol);
-router.post('/',      postRol);
-router.put('/:id',    putRol);
+router.get('/',      [validarJWT],  getRoles);
+router.get('/:id',    [validarJWT], getRol);
+router.post('/',     [validarJWT],  postRol);
+router.put('/:id',    [validarJWT], putRol);
 router.delete('/:id', deleteRol);
 
 

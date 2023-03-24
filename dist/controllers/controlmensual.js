@@ -17,8 +17,10 @@ const controlMensual_1 = __importDefault(require("./../models/controlMensual"));
 const config_1 = __importDefault(require("./../db/config"));
 const sequelize_1 = require("sequelize");
 const getControlMensuales = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const preciolitro = 0.45;
     try {
-        const controlMensuals = yield config_1.default.query("select * from cuenta_ordenio", {
+        const controlMensuals = yield config_1.default.query("select id ,year(fecha_ord) as 'anio', monthname(fecha_ord) as 'mes' , sum(litros_ord) as 'litros_mes', concat('$ ',round((sum(litros_ord)*$1),2)) as 'cuenta_mes', fecha_ord  from ordenio group by extract(year_month from fecha_ord)", {
+            bind: [preciolitro],
             nest: true,
             type: sequelize_1.QueryTypes.SELECT
         });

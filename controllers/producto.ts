@@ -1,11 +1,18 @@
 import { Request, Response } from "express";
 import Producto from './../models/producto';
-import bcrypt from 'bcryptjs';
+import { QueryTypes } from 'sequelize';
+import sequelize from '../db/config';
 
 
 export const getProductos = async (req: Request, res: Response) => {
     try {
-        const productos = await Producto.findAll();
+        const productos = await sequelize.query(
+            "select p.*, c.nombre as categoria_pro from productos p inner join categoria c where id_categoria = c.id",
+            {
+                nest: true,
+                type: QueryTypes.SELECT
+            }
+        );
         res.json(productos);
     } catch (err) {
         res.json({

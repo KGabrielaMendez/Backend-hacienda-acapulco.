@@ -6,7 +6,7 @@ import { QueryTypes } from "sequelize";
 export const getPlansanitarios = async (req: Request, res: Response) => {
         try {
             const datosplanS = await sequelize.query(
-                "SELECT  p.id, gr.nombre_gru, p.fecha_ps, p.descripcion_ps, p.observacion_ps FROM plan_sanitario p, grupo gr where gr.id = p.id_gru",
+                "SELECT p.id , d.id as id_dosis,dosis,id_gru,gr.nombre_gru,id_ganado,id_dosis,fecha_inicio,descripcion_ps,p.estado FROM plan_sanitario p inner join dosis d , grupo gr where p.id_dosis = d.id and id_gru = gr.id order by fecha_inicio desc",
                 {
                     nest: true,
                     type: QueryTypes.SELECT
@@ -25,19 +25,22 @@ export const getPlansanitarios = async (req: Request, res: Response) => {
 
 
 export const getPlansanitario = async (req: Request, res: Response) => {
-    const { id } = req.params;
+    const { fecha } = req.params;
     try {
-        const plansanitario = await Plansanitario.findByPk(id);
-
-        if (plansanitario) {
+        const plansanitario = await sequelize.query(
+            "SELECT p.id , d.id as id_dosis,dosis,id_gru,gr.nombre_gru,id_ganado,id_dosis,fecha_inicio,descripcion_ps,p.estado FROM plan_sanitario p inner join dosis d , grupo gr where p.id_dosis = d.id and id_gru = gr.id and p.estado=($1) order by fecha_inicio desc ",
+            {
+                bind: [fecha],
+                nest:true,
+                type: QueryTypes.SELECT
+            }
+            );
             res.json(plansanitario);
-        } else {
-            res.status(404).json({ msg: 'No existe plansanitario con el id: ' + id });
-        }
 
     } catch (err) {
-        res.json({
-            msg: err,
+        res.status(500).json({
+            message: "error a traer los datos de la base",
+            error: err
         })
     }
 

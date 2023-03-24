@@ -3,17 +3,17 @@ import { getGrupos,
          getGrupo,
          postGrupo,
          putGrupo,
-         deleteGrupo,
-        getByGroups } from '../controllers/grupo';
-import {check} from 'express-validator';
+         deleteGrupo} from '../controllers/grupo';
+
+        import { validarJWT } from '../middlewares/validar-jwt';
 
 const router = Router();
 
-router.get('/',       getGrupos);
-router.get('/:id',    getGrupo);
-router.post('/',      postGrupo);
-router.put('/:id',    putGrupo);
-router.delete('/:id', deleteGrupo);
+router.get('/',    [validarJWT],   getGrupos);
+router.get('/:id', [validarJWT],  getGrupo);
+router.post('/',   [validarJWT],  postGrupo);
+router.put('/:id', [validarJWT],   putGrupo);
+router.delete('/:id',[validarJWT], deleteGrupo);
 
 
 

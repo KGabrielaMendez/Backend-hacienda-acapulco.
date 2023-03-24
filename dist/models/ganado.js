@@ -15,7 +15,7 @@ const Ganado = config_1.default.define('Ganado', {
     },
     arete_gan: {
         type: sequelize_1.DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
     },
     nombre_gan: {
         type: sequelize_1.DataTypes.STRING,

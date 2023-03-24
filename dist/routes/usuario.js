@@ -1,17 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const express_validator_1 = require("express-validator");
 const usuarios_1 = require("../controllers/usuarios");
+const validar_jwt_1 = require("../middlewares/validar-jwt");
+const validar_roles_1 = require("../middlewares/validar-roles");
 const router = (0, express_1.Router)();
-router.get('/', usuarios_1.getUsuarios);
-router.get('/:id', usuarios_1.getUsuario);
-router.post('/', [(0, express_validator_1.check)('nombre_usr', 'El nombre es obligatorio').not().isEmpty(),
-    (0, express_validator_1.check)('email_usr', 'El correo no es valido').isEmail(),
-    (0, express_validator_1.check)('genero_usr', 'No es valido').isIn(['masculino', 'femenino', 'otro'])], 
-//validarCampos,
-usuarios_1.postUsuario);
+router.get('/usuarios', [validar_jwt_1.validarJWT, validar_roles_1.esAdminRol], usuarios_1.getUsuarios);
+router.get('/', [validar_jwt_1.validarJWT, validar_roles_1.esAdminRol], usuarios_1.getEmpleados);
+router.get('/:id', [validar_jwt_1.validarJWT, validar_roles_1.esAdminRol], usuarios_1.getUsuario);
+router.post('/', [validar_jwt_1.validarJWT, validar_roles_1.esAdminRol], usuarios_1.postUsuario);
 router.put('/:id', usuarios_1.putUsuario);
-router.delete('/:id', usuarios_1.deleteUsuario);
+router.delete('/:id', [validar_jwt_1.validarJWT, validar_roles_1.esAdminRol], usuarios_1.deleteUsuario);
 exports.default = router;
 //# sourceMappingURL=usuario.js.map

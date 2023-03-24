@@ -33,11 +33,10 @@ const Usuario = db.define('Usuarios', {
         }
       },
       fecha_nac_usr: {
+        type: DataTypes.DATEONLY,        
+      },
+      fecha_ingreso: {
         type: DataTypes.DATEONLY,
-        validate:{
-            isBefore: "2002-01-01",
-        }
-        
       },
       usuario: {
         type: DataTypes.STRING,

@@ -1,30 +1,25 @@
 import { Router } from 'express';
-import { check } from 'express-validator';
 import {
-        getUsuarios,
+        getEmpleados,
         getUsuario,
+        getUsuarios,
         postUsuario,
         putUsuario,
         deleteUsuario
 } from '../controllers/usuarios';
-import { validarCampos } from '../middlewares/validar-campos';
 
-
+import { validarJWT } from '../middlewares/validar-jwt';
+import { esAdminRol, tieneRol } from '../middlewares/validar-roles';
 
 const router = Router();
-
-router.get('/', getUsuarios);
-router.get('/:id', getUsuario);
-router.post('/',
-        [check('nombre_usr',
-                'El nombre es obligatorio').not().isEmpty(),
-        check('email_usr',
-                'El correo no es valido').isEmail(),
-        check('genero_usr','No es valido').isIn(['masculino','femenino','otro'])],
-        //validarCampos,
-        postUsuario);
+router.get('/usuarios', [validarJWT,esAdminRol], getUsuarios);
+router.get('/', [validarJWT,esAdminRol], getEmpleados);
+router.get('/:id', [validarJWT,esAdminRol], getUsuario);
+router.post('/', [validarJWT,esAdminRol], postUsuario);
 router.put('/:id', putUsuario);
-router.delete('/:id', deleteUsuario);
+router.delete('/:id',  [validarJWT,esAdminRol], deleteUsuario);
+
+
 
 
 

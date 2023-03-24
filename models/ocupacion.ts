@@ -6,6 +6,9 @@ const Ocupacion = db.define('Ocupacion', {
         type: DataTypes.STRING,
         allowNull:false
       },
+      estado:{
+        type: DataTypes.BOOLEAN
+      }
 });
     
       

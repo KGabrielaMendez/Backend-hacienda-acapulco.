@@ -42,4 +42,5 @@ const buscar = (req: Request, res: Response) => {
     }
 }
 
-export default buscar;
+export default 
+    buscar ;

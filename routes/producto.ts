@@ -4,15 +4,16 @@ import { getProductos,
          postProducto,
          putProducto,
          deleteProducto } from '../controllers/producto';
-import {check} from 'express-validator';
+
+         import { validarJWT } from '../middlewares/validar-jwt';
 
 const router = Router();
 
-router.get('/',       getProductos);
-router.get('/:id',    getProducto);
-router.post('/',      postProducto);
-router.put('/:id',    putProducto);
-router.delete('/:id', deleteProducto);
+router.get('/',     [validarJWT],  getProductos);
+router.get('/:id',  [validarJWT],  getProducto);
+router.post('/',    [validarJWT], postProducto);
+router.put('/:id',  [validarJWT], putProducto);
+router.delete('/:id',[validarJWT], deleteProducto);
 
 
 

@@ -18,7 +18,7 @@ const config_1 = __importDefault(require("../db/config"));
 const sequelize_1 = require("sequelize");
 const getPlansanitarios = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const datosplanS = yield config_1.default.query("SELECT  p.id, gr.nombre_gru, p.fecha_ps, p.descripcion_ps, p.observacion_ps FROM plan_sanitario p, grupo gr where gr.id = p.id_gru", {
+        const datosplanS = yield config_1.default.query("SELECT p.id , d.id as id_dosis,dosis,id_gru,gr.nombre_gru,id_ganado,id_dosis,fecha_inicio,descripcion_ps,p.estado FROM plan_sanitario p inner join dosis d , grupo gr where p.id_dosis = d.id and id_gru = gr.id order by fecha_inicio desc", {
             nest: true,
             type: sequelize_1.QueryTypes.SELECT
         });
@@ -34,19 +34,19 @@ const getPlansanitarios = (req, res) => __awaiter(void 0, void 0, void 0, functi
 });
 exports.getPlansanitarios = getPlansanitarios;
 const getPlansanitario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.params;
+    const { fecha } = req.params;
     try {
-        const plansanitario = yield plansanitario_1.default.findByPk(id);
-        if (plansanitario) {
-            res.json(plansanitario);
-        }
-        else {
-            res.status(404).json({ msg: 'No existe plansanitario con el id: ' + id });
-        }
+        const plansanitario = yield config_1.default.query("SELECT p.id , d.id as id_dosis,dosis,id_gru,gr.nombre_gru,id_ganado,id_dosis,fecha_inicio,descripcion_ps,p.estado FROM plan_sanitario p inner join dosis d , grupo gr where p.id_dosis = d.id and id_gru = gr.id and p.estado=($1) order by fecha_inicio desc ", {
+            bind: [fecha],
+            nest: true,
+            type: sequelize_1.QueryTypes.SELECT
+        });
+        res.json(plansanitario);
     }
     catch (err) {
-        res.json({
-            msg: err,
+        res.status(500).json({
+            message: "error a traer los datos de la base",
+            error: err
         });
     }
 });

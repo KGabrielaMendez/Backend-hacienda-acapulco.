@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
 const config_1 = __importDefault(require("../db/config"));
+const categoria_1 = __importDefault(require("./categoria"));
 const Producto = config_1.default.define('Productos', {
     nombre_pro: {
         type: sequelize_1.DataTypes.STRING,
@@ -18,13 +19,12 @@ const Producto = config_1.default.define('Productos', {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
     },
-    udM: {
-        type: sequelize_1.DataTypes.STRING,
-    },
     estado: {
         type: sequelize_1.DataTypes.BOOLEAN,
         defaultValue: 1,
     }
 });
+categoria_1.default.hasMany(Producto, { foreignKey: 'id_raza' });
+Producto.belongsTo(categoria_1.default, { foreignKey: 'id_raza' });
 exports.default = Producto;
 //# sourceMappingURL=producto.js.map

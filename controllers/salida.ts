@@ -1,10 +1,17 @@
 import { Request, Response } from "express";
-import Salida from './../models/salida';
-
+import sequelize from '../db/config';
+import { QueryTypes } from "sequelize";
+import Salida from "../models/salida";
 
 export const getSalidas = async (req: Request, res: Response) => {
     try {
-        const salidas = await Salida.findAll();
+        const salidas = await sequelize.query(
+            "select s.*, u.usuario from salida s , usuarios u where u.id=s.id_usuario order by fecha_salida",
+             {
+                nest:true,
+                type: QueryTypes.SELECT
+            }
+        );
         res.json(salidas);
     } catch (err) {
         res.json({

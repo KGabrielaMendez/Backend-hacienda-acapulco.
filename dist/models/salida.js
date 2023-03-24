@@ -9,7 +9,7 @@ const entrada_1 = __importDefault(require("./entrada"));
 const usuario_1 = __importDefault(require("./usuario"));
 const Salida = config_1.default.define('Salida', {
     fecha_salida: {
-        type: sequelize_1.DataTypes.DATEONLY,
+        type: sequelize_1.DataTypes.DATE,
         allowNull: false,
     },
     cantidad: {

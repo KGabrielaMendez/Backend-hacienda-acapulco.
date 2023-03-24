@@ -14,9 +14,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteProducto = exports.putProducto = exports.postProducto = exports.getProducto = exports.getProductos = void 0;
 const producto_1 = __importDefault(require("./../models/producto"));
+const sequelize_1 = require("sequelize");
+const config_1 = __importDefault(require("../db/config"));
 const getProductos = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const productos = yield producto_1.default.findAll();
+        const productos = yield config_1.default.query("select p.*, c.nombre as categoria_pro from productos p inner join categoria c where id_categoria = c.id", {
+            nest: true,
+            type: sequelize_1.QueryTypes.SELECT
+        });
         res.json(productos);
     }
     catch (err) {

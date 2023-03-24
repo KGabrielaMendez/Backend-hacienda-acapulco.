@@ -38,9 +38,9 @@ const Usuario = config_1.default.define('Usuarios', {
     },
     fecha_nac_usr: {
         type: sequelize_1.DataTypes.DATEONLY,
-        validate: {
-            isBefore: "2002-01-01",
-        }
+    },
+    fecha_ingreso: {
+        type: sequelize_1.DataTypes.DATEONLY,
     },
     usuario: {
         type: sequelize_1.DataTypes.STRING,

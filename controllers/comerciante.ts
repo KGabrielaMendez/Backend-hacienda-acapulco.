@@ -1,14 +1,23 @@
 import { Request, Response } from "express";
 import Comerciante from './../models/comerciante';
+import { QueryTypes } from 'sequelize';
+import sequelize from './../db/config';
 
 
 export const getComerciantes = async (req: Request, res: Response) => {
     try {
-        const comerciantes = await Comerciante.findAll();
+        const comerciantes = await sequelize.query(
+            "SELECT * FROM comerciante where estado=1",
+            {
+                type: QueryTypes.SELECT,
+            }
+        );
         res.json(comerciantes);
     } catch (err) {
+        console.error(err);
         res.json({
-            msg: err,
+            msg: `hable con el admin: ${res.status}`,
+
         })
     }
 }

@@ -4,15 +4,16 @@ import { getOcupaciones,
          postOcupacion,
          putOcupacion,
          deleteOcupacion } from '../controllers/ocupacion';
-import {check} from 'express-validator';
+
+         import { validarJWT } from '../middlewares/validar-jwt';
 
 const router = Router();
 
-router.get('/',       getOcupaciones);
-router.get('/:id',    getOcupacion);
-router.post('/',      postOcupacion);
-router.put('/:id',    putOcupacion);
-router.delete('/:id', deleteOcupacion);
+router.get('/',     [validarJWT],  getOcupaciones);
+router.get('/:id',  [validarJWT],  getOcupacion);
+router.post('/',    [validarJWT],  postOcupacion);
+router.put('/:id',  [validarJWT],  putOcupacion);
+router.delete('/:id', [validarJWT], deleteOcupacion);
 
 
 

@@ -4,15 +4,16 @@ import { getPlansanitarios,
          postPlansanitario,
          putPlansanitario,
          deletePlansanitario } from '../controllers/plansanitario';
-import {check} from 'express-validator';
+
+         import { validarJWT } from '../middlewares/validar-jwt';
 
 const router = Router();
 
-router.get('/',       getPlansanitarios);
-router.get('/:id',    getPlansanitario);
-router.post('/',      postPlansanitario);
-router.put('/:id',    putPlansanitario);
-router.delete('/:id', deletePlansanitario);
+router.get('/',    [validarJWT],      getPlansanitarios);
+router.get('/:fecha',   [validarJWT], getPlansanitario);
+router.post('/',     [validarJWT],    postPlansanitario);
+router.put('/:id',   [validarJWT],    putPlansanitario);
+router.delete('/:id', [validarJWT], deletePlansanitario);
 
 
 

@@ -1,10 +1,12 @@
 import { DataTypes } from 'sequelize';
 import db from '../db/config';
+import Dosis from './dosis';
+import Ganado from './ganado';
 import Grupo from './grupo';
 
 const Plansanitario = db.define('plan_sanitario', {
      
-    fecha_ps: {
+    fecha_inicio: {
         type: DataTypes.DATEONLY,
         allowNull:false,
       },
@@ -12,17 +14,19 @@ const Plansanitario = db.define('plan_sanitario', {
           type: DataTypes.STRING,
           allowNull:false,
       },
-      observacion_pesaje: {
-        type: DataTypes.STRING,
-        defaultValue: null
-      },
-      prox_vacuna: {
-          type: DataTypes.DATEONLY,
-          defaultValue: null
+      estado: {
+          type: DataTypes.STRING,
+          allowNull:false,
       },
     });
     Grupo.hasMany(Plansanitario, {foreignKey: 'id_gru'});
     Plansanitario.belongsTo(Grupo,{foreignKey: 'id_gru'});
+
+    Ganado.hasMany(Plansanitario, {foreignKey: 'id_ganado'});
+    Plansanitario.belongsTo(Ganado,{foreignKey: 'id_ganado'});
+    
+    Dosis.hasMany(Plansanitario, {foreignKey: 'id_dosis'});
+    Plansanitario.belongsTo(Dosis,{foreignKey: 'id_dosis'});
 
 
       

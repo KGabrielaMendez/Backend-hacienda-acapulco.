@@ -12,13 +12,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteOrdenio = exports.putOrdenio = exports.postOrdenio = exports.getOrdenio = exports.getOrdeniosFindAll = exports.getOrdenios = void 0;
+exports.deleteOrdenio = exports.putOrdenio = exports.postOrdenio = exports.getOrdenio = exports.getOrdeniosFindAll = exports.getOrdenios = exports.getOrdeniosByDate = void 0;
 const ordenio_1 = __importDefault(require("../models/ordenio"));
 const config_1 = __importDefault(require("../db/config"));
 const sequelize_1 = require("sequelize");
-const getOrdenios = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getOrdeniosByDate = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { fecha } = req.params;
     try {
-        const ordenios = yield config_1.default.query("select id , DATE_FORMAT(fecha_ord,'%d - %b - %Y') as 'Fecha' , litros_ord as 'Litros Totales'  from ordenio ;", {
+        const ordenios = yield config_1.default.query("select fecha_ord as dia, litros_ord, numerovacas_ord from ordenio where extract(year from fecha_ord) = year($1) and extract(month from fecha_ord) = month($1) order by  fecha_ord ", {
+            bind: [fecha],
             nest: true,
             type: sequelize_1.QueryTypes.SELECT
         });
@@ -26,7 +28,27 @@ const getOrdenios = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
     catch (err) {
         res.status(500).json({
-            msg: "error a traer los datos de la base",
+            message: "error a traer los datos de la base",
+            error: err
+        });
+    }
+});
+exports.getOrdeniosByDate = getOrdeniosByDate;
+const getOrdenios = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    try {
+        const ordenios = yield config_1.default.query("select id , fecha_ord,'%d - %b - %Y') as 'Fecha' , litros_ord as 'Litros_Totales', numerovacas_ord as Vacas_Ordeniadas from ordenio", {
+            nest: true,
+            type: sequelize_1.QueryTypes.SELECT
+        });
+        //validaciones para usuarios autenticados
+        //  const usuarioAutenticado = req.usuario;
+        //   res.json({ ordenios, usuarioAutenticado });
+        res.json({ ordenios });
+    }
+    catch (err) {
+        res.status(500).json({
+            message: "error a traer los datos de la base",
             error: err
         });
     }
@@ -39,7 +61,7 @@ const getOrdeniosFindAll = (req, res) => __awaiter(void 0, void 0, void 0, funct
     }
     catch (err) {
         res.json({
-            msg: err,
+            message: err,
         });
     }
 });
@@ -52,12 +74,12 @@ const getOrdenio = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             res.json(ordenio);
         }
         else {
-            res.status(404).json({ msg: 'No existe ordenio con el id: ' + id });
+            res.status(404).json({ message: 'No existe ordenio con el id: ' + id });
         }
     }
     catch (err) {
         res.json({
-            msg: err,
+            message: err,
         });
     }
 });
@@ -72,7 +94,7 @@ const postOrdenio = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     catch (error) {
         console.log(error);
         res.status(500).json({
-            msg: 'hable con el administrador ',
+            message: 'hable con el administrador ',
             error: error
         });
     }
@@ -94,7 +116,7 @@ const putOrdenio = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     catch (error) {
         console.log(error);
         res.status(500).json({
-            msg: 'hable con el administrador ',
+            message: 'hable con el administrador ',
             error: error
         });
     }
@@ -106,7 +128,7 @@ const deleteOrdenio = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         const ordenio = yield ordenio_1.default.findByPk(id);
         if (!ordenio) {
             return res.status(404).json({
-                msg: 'No existe un ordenio con el id: ' + id
+                message: 'No existe un ordenio con el id: ' + id
             });
         }
         yield ordenio.update({ estado: false });
@@ -115,7 +137,7 @@ const deleteOrdenio = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     catch (error) {
         console.log(error);
         res.status(500).json({
-            msg: 'hable con el administrador ',
+            message: 'hable con el administrador ',
             error: error
         });
     }

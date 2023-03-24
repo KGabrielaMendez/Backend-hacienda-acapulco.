@@ -25,11 +25,6 @@ const Comerciante = config_1.default.define('Comerciante', {
         type: sequelize_1.DataTypes.STRING,
         defaultValue: true,
     },
-    //foraneas
-    /**
-     *  id_raza
-     * id_grupo
-     * */
 });
 exports.default = Comerciante;
 //# sourceMappingURL=comerciante.js.map

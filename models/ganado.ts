@@ -7,11 +7,10 @@ const Ganado = db.define('Ganado', {
     tipo_gan: {
         type: DataTypes.STRING,
         allowNull: false,
-        defaultValue: ['bovino', 'equino'],
     },
     arete_gan: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
     },
     nombre_gan: {
         type: DataTypes.STRING,

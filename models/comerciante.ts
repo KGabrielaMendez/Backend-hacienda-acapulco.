@@ -22,12 +22,6 @@ const Comerciante = db.define('Comerciante', {
         type: DataTypes.STRING,
         defaultValue: true,
     },
-
-      //foraneas
-/**
- *  id_raza
- * id_grupo
- * */
 });
 
  
